@@ -115,29 +115,29 @@ p{margin:0}
 .steps li.on{opacity:1;color:var(--ink)}
 .steps li::before{content:"";width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 2px currentColor}
 .steps li.on::before{background:currentColor}
-.ad-holder{position:relative}
-.ad-holder .sticker{position:relative;--r:22px}
-.ad{position:relative;aspect-ratio:4/5;overflow:hidden;background:#ddd;font-family:Inter,Archivo,sans-serif}
-.ad .imgs{position:absolute;inset:0}
-.ad .imgs img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.ad .gold{opacity:0}
-.ad .sweep{position:absolute;inset:-20% -60%;background:linear-gradient(105deg,transparent 40%,rgba(247,223,142,.38) 50%,transparent 60%);transform:translateX(-120%);pointer-events:none}
-.ad.alive .sweep{animation:sweep 3.2s ease-in-out infinite}
+.post-holder{position:relative}
+.post-holder .sticker{position:relative;--r:22px}
+.post{position:relative;aspect-ratio:4/5;overflow:hidden;background:#ddd;font-family:Inter,Archivo,sans-serif}
+.post .imgs{position:absolute;inset:0}
+.post .imgs img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.post .gold{opacity:0}
+.post .sweep{position:absolute;inset:-20% -60%;background:linear-gradient(105deg,transparent 40%,rgba(247,223,142,.38) 50%,transparent 60%);transform:translateX(-120%);pointer-events:none}
+.post.alive .sweep{animation:sweep 3.2s ease-in-out infinite}
 @keyframes sweep{0%{transform:translateX(-120%)}60%,100%{transform:translateX(120%)}}
-.ad .tag{position:absolute;left:7%;top:6.5%;font:600 12px Archivo,sans-serif;letter-spacing:.16em;color:var(--fernley-navy)}
-.ad .hl{position:absolute;left:6.5%;top:11%;font:400 clamp(44px,5vw,64px)/.9 "Instrument Serif",Georgia,serif;color:var(--fernley-navy);letter-spacing:0}
-.ad .hl .m{display:inline-block;overflow:hidden;vertical-align:top}
-.ad .hl .m span{display:inline-block}
-.ad .dot{position:absolute;left:47%;top:46%;width:22px;height:22px;margin:-11px;border-radius:50%;border:0;padding:0;background:#fff;box-shadow:0 0 0 5px rgba(255,255,255,.4);cursor:pointer}
-.ad.alive .dot{animation:pulse 1.4s ease-out infinite}
+.post .tag{position:absolute;left:7%;top:6.5%;font:600 12px Archivo,sans-serif;letter-spacing:.16em;color:var(--fernley-navy)}
+.post .hl{position:absolute;left:6.5%;top:11%;font:400 clamp(44px,5vw,64px)/.9 "Instrument Serif",Georgia,serif;color:var(--fernley-navy);letter-spacing:0}
+.post .hl .m{display:inline-block;overflow:hidden;vertical-align:top}
+.post .hl .m span{display:inline-block}
+.post .dot{position:absolute;left:47%;top:46%;width:22px;height:22px;margin:-11px;border-radius:50%;border:0;padding:0;background:#fff;box-shadow:0 0 0 5px rgba(255,255,255,.4);cursor:pointer}
+.post.alive .dot{animation:pulse 1.4s ease-out infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.65)}100%{box-shadow:0 0 0 18px rgba(255,255,255,0)}}
-.ad .ripple{position:absolute;left:47%;top:46%;width:40px;height:40px;margin:-20px;border-radius:50%;border:2px solid #fff;opacity:0;pointer-events:none}
-.ad .price{position:absolute;left:52%;top:38%;background:var(--fernley-bone);color:var(--fernley-navy);border-radius:12px;padding:10px 14px;font:600 14px/1.25 Inter,Archivo,sans-serif;box-shadow:0 10px 24px rgba(0,0,0,.18)}
-.ad .price span{display:block;font-weight:500;color:#5C5A52}
-.ad .cta{position:absolute;right:6%;bottom:5.5%;height:44px;overflow:hidden;border-radius:12px;background:var(--fernley-rust);color:var(--fernley-bone);font:600 15px/44px Inter,Archivo,sans-serif;padding:0 18px;min-width:120px;text-align:center}
-.ad .cta span{display:block}
-.ad .wm{position:absolute;left:7%;bottom:6.5%;height:22px;width:auto}
-.ad-holder .note{margin-top:22px;font-size:14px;color:var(--graphite)}
+.post .ripple{position:absolute;left:47%;top:46%;width:40px;height:40px;margin:-20px;border-radius:50%;border:2px solid #fff;opacity:0;pointer-events:none}
+.post .price{position:absolute;left:52%;top:38%;background:var(--fernley-bone);color:var(--fernley-navy);border-radius:12px;padding:10px 14px;font:600 14px/1.25 Inter,Archivo,sans-serif;box-shadow:0 10px 24px rgba(0,0,0,.18)}
+.post .price span{display:block;font-weight:500;color:#5C5A52}
+.post .cta{position:absolute;right:6%;bottom:5.5%;height:44px;overflow:hidden;border-radius:12px;background:var(--fernley-rust);color:var(--fernley-bone);font:600 15px/44px Inter,Archivo,sans-serif;padding:0 18px;min-width:120px;text-align:center}
+.post .cta span{display:block}
+.post .wm{position:absolute;left:7%;bottom:6.5%;height:22px;width:auto}
+.post-holder .note{margin-top:22px;font-size:14px;color:var(--graphite)}
 
 /* what motion does */
 .what{position:relative;z-index:1;overflow:hidden}
@@ -294,7 +294,7 @@ footer .logo{width:120px;color:var(--ink)}
   .contact .patch-a{display:none}
 }
 @media (prefers-reduced-motion:reduce){
-  .sticker .float,.scroll-hint i::after,.ad.alive .sweep,.ad.alive .dot{animation:none}
+  .sticker .float,.scroll-hint i::after,.post.alive .sweep,.post.alive .dot{animation:none}
 }
 </style>
 </head>
@@ -354,9 +354,9 @@ footer .logo{width:120px;color:var(--ink)}
         <li>Buttons that answer</li>
       </ol>
     </div>
-    <div class="ad-holder">
+    <div class="post-holder">
       <div class="sticker"><i class="h1"></i><i class="h2"></i><div class="face">
-        <div class="ad" id="ad">
+        <div class="post" id="post">
           <div class="imgs"><img class="day" src="/moda/images/30fad174ad.webp" alt="A model in a cable knit sweater and olive trousers on a rooftop"><img class="gold" src="/moda/images/3b9413d4e2.webp" alt=""></div>
           <div class="sweep"></div>
           <div class="tag">DROP 04</div>
@@ -718,7 +718,7 @@ addEventListener("scroll", onScrollNav, { passive: true }); onScrollNav();
 
 /* ---------- Motion ---------- */
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const ad = document.getElementById("ad");
+const ad = document.getElementById("post");
 const steps = [...document.querySelectorAll("#steps li")];
 const stateEl = document.getElementById("state");
 
@@ -801,7 +801,7 @@ if (reduce || !window.gsap || !window.ScrollTrigger) {
   });
 
   mm.add("(max-width: 760px)", () => {
-    stillTimeline({ trigger: ".ad-holder", start: "top 75%", end: "bottom 25%", scrub: 0.6 });
+    stillTimeline({ trigger: ".post-holder", start: "top 75%", end: "bottom 25%", scrub: 0.6 });
   });
 
   // the reel grows from a card to full width
