@@ -43,7 +43,6 @@ html{scroll-padding-top:calc(84px + env(safe-area-inset-top,0px))}
 *,*::before,*::after{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 18px/1.55 Archivo,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--paper)}
-.gridbg{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:80px 80px}
 img,video{display:block;max-width:100%}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--piscina);outline-offset:3px;border-radius:6px}
@@ -105,6 +104,9 @@ p{margin:0}
 .hero-cards .c3 .face{padding:12px 18px;font:600 15px Archivo,sans-serif;color:#141414;display:flex;align-items:center;gap:8px;white-space:nowrap}
 .patch-a{position:absolute;right:5vw;top:13vh;width:min(19vw,290px);height:auto;z-index:2;overflow:visible}
 .hero .patch-a{position:relative;right:auto;top:auto;flex:none;width:clamp(86px,12.5vw,214px)}
+.hero-fx{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;z-index:0}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:20vh;background:linear-gradient(to bottom,transparent,var(--paper));z-index:1;pointer-events:none}
+.hero.no-gl{background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--ink) 14%,var(--paper)) 0,var(--paper) 60%)}
 .scroll-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-size:14px;color:var(--graphite);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:3}
 .scroll-hint i{display:block;width:1.5px;height:38px;background:var(--line);position:relative;overflow:hidden}
 .scroll-hint i::after{content:"";position:absolute;left:0;top:-40%;width:100%;height:40%;background:var(--ink);animation:drip 1.8s ease-in-out infinite}
@@ -295,6 +297,9 @@ footer .logo{width:120px;color:var(--ink)}
   .hero h1{font-size:clamp(44px,13.5vw,70px)}
   .hero-title{display:block}
   .hero .patch-a{position:absolute;right:2vw;bottom:-2%;width:clamp(50px,15vw,80px)}
+.hero-fx{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;z-index:0}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:20vh;background:linear-gradient(to bottom,transparent,var(--paper));z-index:1;pointer-events:none}
+.hero.no-gl{background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--ink) 14%,var(--paper)) 0,var(--paper) 60%)}
   .hero .ctas .btn{min-height:46px;padding:0 20px;font-size:16px}
   .hero .scroll-hint{display:none}
   .hero .lede{max-width:none}
@@ -325,7 +330,6 @@ footer .logo{width:120px;color:var(--ink)}
 </style>
 </head>
 <body>
-<div class="gridbg" aria-hidden="true"></div>
 
 <header class="nav" id="nav">
   <div class="wrap">
@@ -345,6 +349,7 @@ footer .logo{width:120px;color:var(--ink)}
 <main>
 <!-- HERO -->
 <section class="hero" id="top">
+  <canvas class="hero-fx" id="heroFx" aria-hidden="true"></canvas>
   <div class="hero-cards" aria-hidden="true">
     <div class="sticker c1" data-depth="0.5" style="--r:20px"><div class="float" style="--bob:6.5s"><div class="pt"><i class="h1"></i><i class="h2"></i><div class="face"><video data-play muted loop playsinline preload="metadata" poster="/moda/images/77ae92a049.webp" src="/moda/media/loop_wall.mp4"></video></div></div></div></div>
     <div class="sticker c2 m-show" data-depth="0.9" style="--r:16px"><div class="float" style="--bob:8s"><div class="pt"><i class="h1"></i><i class="h2"></i><div class="face"><img src="/moda/images/1f6ebaec5d.webp" alt=""></div></div></div></div>
@@ -886,6 +891,313 @@ function stillTimeline(st){
     .to({}, { duration: 0.1 }, 0.9);
   return tl;
 }
+</script>
+<script>
+/* ---------- Hero flashlight wall (WebGL shader "Mesh drift", port of Flashlight Text Reveal) ---------- */
+(function(){
+  const hero = document.getElementById("top"), canvas = document.getElementById("heroFx");
+  if (!hero || !canvas) return;
+
+  const VERT = `
+attribute vec2 a_position;
+void main() {
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}
+`;
+  const FRAG = `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+
+uniform vec3 u_colors[8];
+uniform vec4 u_scene;      // resolution.xy, time, colour count
+uniform vec4 u_shape;      // scale, intensity, paramA, warp
+uniform vec4 u_surface;    // detail, contrast, brightness, saturation
+uniform vec4 u_finish;     // hue, vignette, blur, grain
+uniform vec4 u_transform;  // seed, rotation, drift, OKLab toggle
+uniform vec4 u_space;      // offset.xy, pointer.xy
+uniform vec4 u_cursor;
+
+#define u_resolution u_scene.xy
+#define u_time u_scene.z
+#define u_colorCount u_scene.w
+#define u_scale u_shape.x
+#define u_intensity u_shape.y
+#define u_paramA u_shape.z
+#define u_warp u_shape.w
+#define u_detail u_surface.x
+#define u_contrast u_surface.y
+#define u_brightness u_surface.z
+#define u_saturation u_surface.w
+#define u_hue u_finish.x
+#define u_vignette u_finish.y
+#define u_blur u_finish.z
+#define u_grain u_finish.w
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+#define u_seed u_transform.x
+#else
+#define u_seed mod(u_transform.x, 31.0)
+#endif
+#define u_rotate u_transform.y
+#define u_drift u_transform.z
+#define u_oklab u_transform.w
+#define u_offset u_space.xy
+#define u_mouse u_space.zw
+#define u_cursorPresence u_cursor.x
+#define u_cursorEffect u_cursor.y
+#define u_cursorStrength u_cursor.z
+#define u_cursorRadius u_cursor.w
+
+float hash21(vec2 p) {
+#ifndef GL_FRAGMENT_PRECISION_HIGH
+  p = mod(p, 31.0);
+#endif
+  p = fract(p * vec2(234.34, 435.345));
+  p += dot(p, p + 34.23);
+  return fract(p.x * p.y);
+}
+
+float grainHash(vec2 p) {
+  vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+  p3 += dot(p3, p3.yzx + 33.33);
+  return fract((p3.x + p3.y) * p3.z);
+}
+
+float noise(vec2 p) {
+  vec2 i = floor(p);
+  vec2 f = fract(p);
+  vec2 u = f * f * (3.0 - 2.0 * f);
+  return mix(
+    mix(hash21(i), hash21(i + vec2(1.0, 0.0)), u.x),
+    mix(hash21(i + vec2(0.0, 1.0)), hash21(i + vec2(1.0, 1.0)), u.x),
+    u.y);
+}
+
+float fbm(vec2 p) {
+  float v = 0.0;
+  float a = 0.5;
+  for (int i = 0; i < 5; i++) {
+    v += a * noise(p);
+    p = p * 2.03 + vec2(17.0, 9.2);
+    a *= 0.5;
+  }
+  return v;
+}
+
+vec3 hueRotate(vec3 col, float a) {
+  const mat3 toYIQ = mat3(0.299, 0.596, 0.211,
+                          0.587, -0.274, -0.523,
+                          0.114, -0.322, 0.312);
+  const mat3 toRGB = mat3(1.0, 1.0, 1.0,
+                          0.956, -0.272, -1.106,
+                          0.621, -0.647, 1.703);
+  vec3 yiq = toYIQ * col;
+  float ca = cos(a), sa = sin(a);
+  yiq = vec3(yiq.x, yiq.y * ca - yiq.z * sa, yiq.y * sa + yiq.z * ca);
+  return toRGB * yiq;
+}
+
+vec3 shade(vec2 uv, vec2 p, float t) {
+  vec3 acc = u_colors[0] * 0.15;
+  float total = 0.15;
+  for (int i = 0; i < 8; i++) {
+    if (float(i) >= u_colorCount) break;
+    float fi = float(i);
+    vec2 c = vec2(
+      sin(t * (0.21 + fi * 0.071) + fi * 2.4 + u_seed),
+      cos(t * (0.17 + fi * 0.093) + fi * 1.7)) * (0.45 + u_intensity * 0.35);
+    float w = exp(-dot(p - c, p - c) * 6.0);
+    acc += u_colors[i] * w;
+    total += w;
+  }
+  return acc / total;
+}
+
+void main() {
+  vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+  vec2 screenUv = uv;
+  vec2 p = (gl_FragCoord.xy - 0.5 * u_resolution.xy)
+    / min(u_resolution.x, u_resolution.y);
+  float cursorMask = 0.0;
+
+  if (u_cursorPresence > 0.001) {
+    vec2 cursor = (0.5 * u_mouse * u_resolution.xy)
+      / min(u_resolution.x, u_resolution.y);
+    vec2 cursorDelta = p - cursor;
+    float cursorDistance = length(cursorDelta);
+    cursorMask = u_cursorPresence
+      * (1.0 - smoothstep(0.0, u_cursorRadius, cursorDistance));
+  }
+
+  uv = p * min(u_resolution.x, u_resolution.y) / u_resolution.xy + 0.5;
+  p *= u_scale;
+  if (abs(u_rotate) > 0.0001) {
+    float cr = cos(u_rotate), sr = sin(u_rotate);
+    p = mat2(cr, -sr, sr, cr) * p;
+  }
+  p += u_offset;
+  if (u_drift > 0.0001)
+    p += u_drift * vec2(sin(u_time * 0.31), cos(u_time * 0.23));
+  if (u_warp > 0.0) {
+    p += u_warp * (vec2(
+      fbm(p * u_detail + u_seed),
+      fbm(p * u_detail + vec2(5.2, 1.3))) - 0.5);
+  }
+  vec3 col;
+  if (u_blur > 0.0) {
+    float e = u_blur;
+    float pe = e * u_scale;
+    vec2 uvE = vec2(e) * min(u_resolution.x, u_resolution.y) / u_resolution.xy;
+    col  = shade(uv, p, u_time) * 0.36;
+    col += shade(uv + vec2(uvE.x, 0.0), p + vec2(pe, 0.0), u_time) * 0.16;
+    col += shade(uv - vec2(uvE.x, 0.0), p - vec2(pe, 0.0), u_time) * 0.16;
+    col += shade(uv + vec2(0.0, uvE.y), p + vec2(0.0, pe), u_time) * 0.16;
+    col += shade(uv - vec2(0.0, uvE.y), p - vec2(0.0, pe), u_time) * 0.16;
+  } else {
+    col = shade(uv, p, u_time);
+  }
+  if (abs(u_contrast - 1.0) > 0.0001)
+    col = (col - 0.5) * u_contrast + 0.5;
+  if (abs(u_saturation - 1.0) > 0.0001) {
+    float luma = dot(col, vec3(0.299, 0.587, 0.114));
+    col = mix(vec3(luma), col, u_saturation);
+  }
+  if (abs(u_hue) > 0.0001)
+    col = hueRotate(col, u_hue);
+  if (abs(u_brightness) > 0.0001)
+    col += u_brightness;
+  if (u_vignette > 0.0001) {
+    float vd = length(screenUv - 0.5) * 1.41421356;
+    col *= 1.0 - u_vignette * smoothstep(0.35, 1.0, vd);
+  }
+  if (u_cursorPresence > 0.001 && u_cursorEffect > 3.5)
+    col += (vec3(0.18) + col * 0.12) * cursorMask * u_cursorStrength;
+  if (u_grain > 0.0001)
+    col += (grainHash(
+      gl_FragCoord.xy + vec2(u_seed * 17.0, u_seed * 31.0)) - 0.5) * u_grain;
+  gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
+}
+`;
+
+  // Light settings: radius is in units of the wall's short side.
+  const P = { radius: 0.35, strength: 1, speed: 0.86, scale: 2.5, intensity: 0.59, warp: 0, detail: 2.4,
+    saturation: 1, hue: 6.28, vignette: 0, blur: 0.016, drift: 0.03, seed: 1, rotation: 0 };
+  const darkMQ = matchMedia("(prefers-color-scheme: dark)");
+  const reducedMQ = matchMedia("(prefers-reduced-motion: reduce)");
+  const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === "dark" : darkMQ.matches; };
+  const look = () => isDark()
+    ? { palette: ["#101010", "#3A3A3A"], brightness: -0.1, contrast: 0.91, grain: 0.16 }
+    : { palette: ["#E7E2D6", "#FAF7F0"], brightness: 0, contrast: 1, grain: 0.07 };
+  const hexToRgb = hex => { const n = parseInt(hex.replace("#", ""), 16); return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255]; };
+  const wanderAt = t => [0.62 * Math.sin(t * 0.37), 0.5 * Math.sin(t * 0.53 + 1.3)];
+
+  function compile(gl) {
+    const prog = gl.createProgram();
+    for (const [type, src] of [[gl.VERTEX_SHADER, VERT], [gl.FRAGMENT_SHADER, FRAG]]) {
+      const sh = gl.createShader(type);
+      gl.shaderSource(sh, src); gl.compileShader(sh);
+      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) { console.warn(gl.getShaderInfoLog(sh)); return null; }
+      gl.attachShader(prog, sh); gl.deleteShader(sh);
+    }
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { console.warn(gl.getProgramInfoLog(prog)); return null; }
+    return prog;
+  }
+
+  const ptr = { x: 0, y: 0, has: false };
+  let teardown = null;
+
+  function init() {
+    const gl = canvas.getContext("webgl", { antialias: false, alpha: false });
+    const prog = gl && compile(gl);
+    if (!gl || !prog) { hero.classList.add("no-gl"); canvas.style.display = "none"; return null; }
+    hero.classList.remove("no-gl");
+
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const pos = gl.getAttribLocation(prog, "a_position");
+    gl.enableVertexAttribArray(pos);
+    gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+    gl.useProgram(prog);
+    const L = n => gl.getUniformLocation(prog, n);
+    const loc = { colors: L("u_colors"), scene: L("u_scene"), shape: L("u_shape"), surface: L("u_surface"),
+      finish: L("u_finish"), transform: L("u_transform"), space: L("u_space"), cursor: L("u_cursor") };
+    const colorData = new Float32Array(24);
+
+    const light = { x: 0, y: 0 };
+    let presence = 0, time = 0, roam = 0, last = 0, raf = 0, onScreen = true;
+
+    const draw = now => {
+      raf = 0;
+      const dt = last ? Math.min((now - last) / 1000, 0.05) : 0.016;
+      last = now;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const w = Math.max(1, Math.round(canvas.clientWidth * dpr)), h = Math.max(1, Math.round(canvas.clientHeight * dpr));
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+
+      const reduced = reducedMQ.matches, moving = !reduced;
+      if (moving) { time += dt * P.speed; roam += dt; }
+
+      const r = canvas.getBoundingClientRect();
+      const inside = ptr.has && ptr.x >= r.left && ptr.x <= r.right && ptr.y >= r.top && ptr.y <= r.bottom;
+      const tgt = inside
+        ? [((ptr.x - r.left) / r.width) * 2 - 1, 1 - ((ptr.y - r.top) / r.height) * 2]
+        : moving ? wanderAt(roam) : [0, 0];
+      const k = reduced ? 1 : 1 - Math.exp(-dt / (inside ? 0.08 : 0.6));
+      light.x += (tgt[0] - light.x) * k; light.y += (tgt[1] - light.y) * k;
+      presence += (1 - presence) * (reduced ? 1 : 1 - Math.exp(-dt / 0.25));
+
+      const lk = look();
+      colorData.fill(0);
+      lk.palette.forEach((hex, i) => colorData.set(hexToRgb(hex), i * 3));
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.uniform3fv(loc.colors, colorData);
+      gl.uniform4f(loc.scene, canvas.width, canvas.height, time, lk.palette.length);
+      gl.uniform4f(loc.shape, P.scale, P.intensity, 0.5, P.warp);
+      gl.uniform4f(loc.surface, P.detail, lk.contrast, lk.brightness, P.saturation);
+      gl.uniform4f(loc.finish, P.hue, P.vignette, P.blur, lk.grain);
+      gl.uniform4f(loc.transform, P.seed, P.rotation, P.drift, 0);
+      gl.uniform4f(loc.space, 0, 0, light.x, light.y);
+      gl.uniform4f(loc.cursor, presence, 4, P.strength, P.radius);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+      // reduced motion: one frame is enough unless the light is still easing
+      const easing = Math.abs(tgt[0] - light.x) > 0.0005 || Math.abs(tgt[1] - light.y) > 0.0005 || Math.abs(1 - presence) > 0.001;
+      if (!document.hidden && onScreen && (moving || easing)) raf = requestAnimationFrame(draw);
+    };
+    const kick = () => { if (!raf && !document.hidden && onScreen) { last = 0; raf = requestAnimationFrame(draw); } };
+
+    const io = new IntersectionObserver(es => { onScreen = es[0].isIntersecting; if (onScreen) kick(); }, { threshold: 0 });
+    io.observe(hero);
+    const onVis = () => { if (document.hidden) { cancelAnimationFrame(raf); raf = 0; } else kick(); };
+    const onLost = e => { e.preventDefault(); cancelAnimationFrame(raf); raf = 0; };
+    const onRestored = () => { if (teardown) teardown(); teardown = init(); };
+    const onMove = () => kick();
+    document.addEventListener("visibilitychange", onVis);
+    canvas.addEventListener("webglcontextlost", onLost);
+    canvas.addEventListener("webglcontextrestored", onRestored);
+    addEventListener("pointermove", onMove, { passive: true });
+    darkMQ.addEventListener("change", kick);
+    kick();
+
+    return () => {
+      cancelAnimationFrame(raf); io.disconnect();
+      document.removeEventListener("visibilitychange", onVis);
+      canvas.removeEventListener("webglcontextlost", onLost);
+      canvas.removeEventListener("webglcontextrestored", onRestored);
+      removeEventListener("pointermove", onMove);
+      darkMQ.removeEventListener("change", kick);
+      gl.deleteBuffer(buf); gl.deleteProgram(prog);
+    };
+  }
+
+  addEventListener("pointermove", e => { ptr.x = e.clientX; ptr.y = e.clientY; ptr.has = true; }, { passive: true });
+  document.documentElement.addEventListener("pointerleave", () => { ptr.has = false; });
+  teardown = init();
+})();
 </script>
 </body>
 </html>
