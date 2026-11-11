@@ -84,7 +84,7 @@ p{margin:0}
 /* hero */
 .hero{position:relative;min-height:100vh;min-height:100svh;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center}
 .hero .wrap{padding:112px 0 11vh;z-index:3}
-.hero-title{display:flex;align-items:center;justify-content:center;gap:clamp(14px,2.4vw,40px);position:relative}
+.hero-title{position:relative;width:fit-content;max-width:100%;margin:0 auto}
 .hero h1{font-size:clamp(52px,7.6vw,132px);letter-spacing:-.05em;line-height:.88;position:relative;z-index:3;text-align:center}
 .hero h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
 .hero h1 .w{display:inline-block}
@@ -103,7 +103,7 @@ p{margin:0}
 .hero-cards .c8{left:90.5%;top:62%} .c8 .face{width:clamp(72px,7vw,126px);aspect-ratio:9/16}
 .hero-cards .c3 .face{padding:12px 18px;font:600 15px Archivo,sans-serif;color:#141414;display:flex;align-items:center;gap:8px;white-space:nowrap}
 .patch-a{position:absolute;right:5vw;top:13vh;width:min(19vw,290px);height:auto;z-index:2;overflow:visible}
-.hero .patch-a{position:relative;right:auto;top:auto;flex:none;width:clamp(86px,12.5vw,214px)}
+.hero .patch-a{position:absolute;left:100%;right:auto;top:0;bottom:0;margin:auto 0 auto clamp(10px,1.6vw,28px);width:clamp(80px,10.2vw,176px)}
 .hero-fx{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;z-index:0}
 .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:20vh;background:linear-gradient(to bottom,transparent,var(--paper));z-index:1;pointer-events:none}
 .hero.no-gl{background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--ink) 14%,var(--paper)) 0,var(--paper) 60%)}
@@ -295,8 +295,8 @@ footer .logo{width:120px;color:var(--ink)}
   .hero{align-items:flex-end}
   .hero .wrap{padding:42svh 0 9vh}
   .hero h1{font-size:clamp(44px,13.5vw,70px)}
-  .hero-title{display:block}
-  .hero .patch-a{position:absolute;right:2vw;bottom:-2%;width:clamp(50px,15vw,80px)}
+  .hero-title{width:auto}
+  .hero .patch-a{left:auto;right:2vw;top:auto;bottom:-2%;margin:0;width:clamp(50px,15vw,80px)}
 .hero-fx{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;z-index:0}
 .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:20vh;background:linear-gradient(to bottom,transparent,var(--paper));z-index:1;pointer-events:none}
 .hero.no-gl{background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--ink) 14%,var(--paper)) 0,var(--paper) 60%)}
