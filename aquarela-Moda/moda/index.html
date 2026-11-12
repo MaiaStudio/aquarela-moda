@@ -18,27 +18,18 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Instrument+Serif&display=swap">
 <style>
 :root{
-  --paper:#F4F1EA; --ink:#141414; --graphite:#6B675F; --card:#FFFFFF; --line:rgba(20,20,20,.14); --grid:rgba(107,103,95,.09);
-  --inv-bg:#141414; --inv-fg:#F4F1EA; --inv-muted:#B9B4AA;
+  --paper:#141414; --ink:#F4F1EA; --graphite:#B9B4AA; --card:#1F1E1C; --line:rgba(244,241,234,.16);
+  --inv-bg:#F4F1EA; --inv-fg:#141414; --inv-muted:#55524C;
   --rosa:#F6B3CB; --manteiga:#F7DF8E; --piscina:#3DBADB;
   --fernley-bone:#F6F2EA; --fernley-navy:#1E2A3A; --fernley-rust:#B5502E;
-  color-scheme:light;
+  color-scheme:dark;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --paper:#141414; --ink:#F4F1EA; --graphite:#B9B4AA; --card:#1F1E1C; --line:rgba(244,241,234,.16); --grid:rgba(244,241,234,.06);
-    --inv-bg:#F4F1EA; --inv-fg:#141414; --inv-muted:#55524C;
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --paper:#141414; --ink:#F4F1EA; --graphite:#B9B4AA; --card:#1F1E1C; --line:rgba(244,241,234,.16); --grid:rgba(244,241,234,.06);
-  --inv-bg:#F4F1EA; --inv-fg:#141414; --inv-muted:#55524C;
-  color-scheme:dark;
-}
+/* sections alternate between black and light; each one carries its own palette */
+.theme-dark{--paper:#141414; --ink:#F4F1EA; --graphite:#B9B4AA; --card:#1F1E1C; --line:rgba(244,241,234,.16); --inv-bg:#F4F1EA; --inv-fg:#141414; --inv-muted:#55524C; background:var(--paper); color:var(--ink); color-scheme:dark}
+.theme-light{--paper:#F4F1EA; --ink:#141414; --graphite:#6B675F; --card:#FFFFFF; --line:rgba(20,20,20,.14); --inv-bg:#141414; --inv-fg:#F4F1EA; --inv-muted:#B9B4AA; background:var(--paper); color:var(--ink); color-scheme:light}
 html{scroll-padding-top:calc(84px + env(safe-area-inset-top,0px))}
 *,*::before,*::after{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 18px/1.55 Archivo,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
@@ -62,6 +53,8 @@ p{margin:0}
 /* header */
 .nav{position:fixed;top:0;left:0;right:0;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:background .3s}
 .nav.solid{background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.nav.theme-dark,.nav.theme-light{background:transparent;transition:background .3s,color .3s}
+.nav.theme-dark.solid,.nav.theme-light.solid{background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:76px}
 .nav .logo{display:block;width:150px;color:var(--ink)}
 .nav .logo svg{display:block;width:100%;height:auto}
@@ -218,19 +211,19 @@ p{margin:0}
 .terms p+p{margin-top:8px}
 
 /* sprint */
-.sprint{position:relative;z-index:1;background:var(--inv-bg);color:var(--inv-fg);padding:120px 0;margin-top:80px}
+.sprint{position:relative;z-index:1;padding:120px 0;margin-top:80px}
 .sprint .wrap{display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:center}
 .sprint .price{font-size:22px;font-weight:600;margin-top:20px}
 .sprint .price b{font-size:64px;font-weight:800;letter-spacing:-.04em;margin-right:8px}
-.sprint p.body{margin-top:18px;color:var(--inv-muted);max-width:30em}
-.sprint .btn{margin-top:30px;background:var(--inv-fg);color:var(--inv-bg)}
+.sprint p.body{margin-top:18px;color:var(--graphite);max-width:30em}
+.sprint .btn{margin-top:30px}
 .days{position:relative;padding:20px 0}
 .days .rail{position:relative;height:6px;border-radius:6px;background:rgba(127,127,127,.3);margin:84px 0 14px}
-.days .rail i{position:absolute;inset:0;transform-origin:0 50%;transform:scaleX(0);border-radius:6px;background:var(--inv-fg)}
-.days ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,1fr);font-size:14px;color:var(--inv-muted)}
+.days .rail i{position:absolute;inset:0;transform-origin:0 50%;transform:scaleX(0);border-radius:6px;background:var(--ink)}
+.days ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,1fr);font-size:14px;color:var(--graphite)}
 .days ol li{position:relative}
-.days .chip{position:absolute;bottom:34px;transform:translateX(-50%);white-space:nowrap;padding:10px 14px;border-radius:12px;background:var(--inv-fg);color:var(--inv-bg);font-weight:600;font-size:15px;box-shadow:0 0 0 4px var(--inv-bg)}
-.days .chip::after{content:"";position:absolute;left:50%;bottom:-10px;width:2px;height:10px;background:var(--inv-fg)}
+.days .chip{position:absolute;bottom:34px;transform:translateX(-50%);white-space:nowrap;padding:10px 14px;border-radius:12px;background:var(--ink);color:var(--paper);font-weight:600;font-size:15px;box-shadow:0 0 0 4px var(--paper)}
+.days .chip::after{content:"";position:absolute;left:50%;bottom:-10px;width:2px;height:10px;background:var(--ink)}
 
 /* founding five */
 .founding{position:relative;z-index:1;padding:140px 0 60px}
@@ -301,9 +294,6 @@ footer .logo{width:120px;color:var(--ink)}
   .hero h1{font-size:clamp(44px,13.5vw,70px)}
   .hero-title{width:auto}
   .hero .patch-a{left:auto;right:2vw;top:auto;bottom:-2%;margin:0;width:clamp(50px,15vw,80px)}
-.hero-fx{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;z-index:0}
-.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:20vh;background:linear-gradient(to bottom,transparent,var(--paper));z-index:1;pointer-events:none}
-.hero.no-gl{background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--ink) 14%,var(--paper)) 0,var(--paper) 60%)}
   .hero .ctas .btn{min-height:46px;padding:0 20px;font-size:16px}
   .hero .scroll-hint{display:none}
   .hero .lede{max-width:none}
@@ -352,7 +342,7 @@ footer .logo{width:120px;color:var(--ink)}
 
 <main>
 <!-- HERO -->
-<section class="hero" id="top">
+<section class="hero theme-dark" id="top">
   <canvas class="hero-fx" id="heroFx" aria-hidden="true"></canvas>
   <div class="hero-cards" aria-hidden="true">
     <div class="sticker c1" data-depth="0.5" style="--r:20px"><div class="float" style="--bob:6.5s"><div class="pt"><i class="h1"></i><i class="h2"></i><div class="face"><video data-play muted loop playsinline preload="metadata" poster="/moda/images/77ae92a049.webp" src="/moda/media/loop_wall.mp4"></video></div></div></div></div>
@@ -378,7 +368,7 @@ footer .logo{width:120px;color:var(--ink)}
 </section>
 
 <!-- STATIC VS MOVING -->
-<section class="still" id="still">
+<section class="still theme-light" id="still">
   <div class="wrap">
     <div>
       <h2>A still post asks for attention. A moving one takes it.</h2>
@@ -411,7 +401,7 @@ footer .logo{width:120px;color:var(--ink)}
 </section>
 
 <!-- WHAT MOTION DOES -->
-<section class="what" id="what">
+<section class="what theme-dark" id="what">
   <div class="loop"><h2 class="sr-only">What motion does for a fashion brand.</h2><div class="text-loop" id="whatLoop" data-text="What motion does for a fashion brand."></div></div>
   <div class="hscroll" id="track">
     <article class="panel">
@@ -434,7 +424,7 @@ footer .logo{width:120px;color:var(--ink)}
 </section>
 
 <!-- THE WORK -->
-<section class="work" id="work">
+<section class="work theme-light" id="work">
   <div class="wrap">
     <div class="head">
       <h2>One brand. Endless ads.</h2>
@@ -464,7 +454,7 @@ footer .logo{width:120px;color:var(--ink)}
 </section>
 
 <!-- PACKAGES -->
-<section class="packages" id="packages">
+<section class="packages theme-dark" id="packages">
   <div class="wrap">
     <div class="head">
       <h2>Pick your pace.</h2>
@@ -541,7 +531,7 @@ footer .logo{width:120px;color:var(--ink)}
 </section>
 
 <!-- SPRINT -->
-<section class="sprint" id="sprint">
+<section class="sprint theme-light" id="sprint">
   <div class="wrap">
     <div>
       <h2>Not sure yet? Start with a Sprint.</h2>
@@ -565,7 +555,7 @@ footer .logo{width:120px;color:var(--ink)}
 </section>
 
 <!-- FOUNDING FIVE -->
-<section class="founding" id="founding">
+<section class="founding theme-dark" id="founding">
   <div class="wrap">
     <div class="top">
       <h2>The Founding Five.</h2>
@@ -583,7 +573,7 @@ footer .logo{width:120px;color:var(--ink)}
 </section>
 
 <!-- HOW IT WORKS -->
-<section class="how" id="how">
+<section class="how theme-light" id="how">
   <div class="wrap">
     <h2>How it works.</h2>
     <div class="howwrap"><span class="line" aria-hidden="true"><i></i></span><ol id="howList">
@@ -596,7 +586,7 @@ footer .logo{width:120px;color:var(--ink)}
 </section>
 
 <!-- FAQ -->
-<section class="faq" id="faq">
+<section class="faq theme-dark" id="faq">
   <div class="wrap grid">
     <h2>Questions, answered.</h2>
     <div>
@@ -611,7 +601,7 @@ footer .logo{width:120px;color:var(--ink)}
 </section>
 
 <!-- CONTACT -->
-<section class="contact" id="contact">
+<section class="contact theme-light" id="contact">
   <svg class="patch-a" id="footA" aria-hidden="true"></svg>
   <div class="wrap">
     <h2>Let’s make your brand move.</h2>
@@ -623,7 +613,7 @@ footer .logo{width:120px;color:var(--ink)}
 </section>
 </main>
 
-<footer>
+<footer class="theme-dark">
   <div class="wrap">
     <span class="logo"><svg role="img" aria-label="Aquarela" xmlns="http://www.w3.org/2000/svg" viewBox="320.5 1045.1 7392.9 1798.3"><path fill-rule="evenodd" fill="currentColor" transform="translate(-2200 -4957)" d="M2940.12,6002.06l-419.6,1398.67h167.84L3060,6161.91c197.82,0,339.68,161.85,339.68,359.66v881.16h159.85V6521.57c0-285.73-213.8-519.51-499.53-519.51H2940.12Zm69.93,1009.04c0,59.94,47.96,109.9,111.9,109.9,57.94,0,107.89-49.96,107.89-109.9s-49.95-109.9-107.89-109.9C3058.01,6901.2,3010.05,6951.16,3010.05,7011.1Zm1688.39-609.42h-519.5c-285.73,0-519.51,213.8-519.51,499.52s233.78,499.53,519.51,499.53H4538.6v399.62h159.84V6401.68Zm-159.84,839.2H4178.94c-197.81,0-359.66-141.86-359.66-339.68s161.85-339.67,359.66-339.67H4538.6v679.35Zm259.75-839.2V6901.2c0,285.73,213.79,519.51,499.52,519.51s499.53-233.78,499.53-519.51V6401.68H5637.55V6901.2c0,197.82-141.87,359.66-339.68,359.66S4958.2,7099.02,4958.2,6901.2V6401.68H4798.35Zm1538.53,0H6055.15v159.85h281.73c197.81,0,339.68,161.84,339.68,359.66v479.54h159.85V6921.19C6836.41,6635.46,6622.61,6401.68,6336.88,6401.68ZM5797.4,7400.73h159.84c0-125.88,103.9-229.78,229.78-229.78s229.79,103.9,229.79,229.78h159.84c0-213.8-175.83-389.63-389.63-389.63S5797.4,7186.93,5797.4,7400.73Zm1638.43-999.05c-285.72,0-499.52,233.78-499.52,519.51v479.54h159.85V6921.19c0-197.82,141.86-359.66,339.67-359.66V6401.68Zm209.8,419.6c35.97-159.85,179.83-279.73,349.67-279.73s313.7,119.88,349.67,279.73H7645.63Zm349.67,439.58c-169.84,0-313.7-119.88-349.67-279.73h869.18V6901.2c0-285.72-233.78-519.5-519.51-519.5s-519.5,233.78-519.5,519.5,233.77,519.51,519.5,519.51V7260.86Zm619.41-1258.8V7400.73h159.85V6002.06H8614.71Zm799.24,399.62H9132.22v159.85h281.73c197.81,0,339.68,161.84,339.68,359.66v479.54h159.84V6921.19C9913.47,6635.46,9699.68,6401.68,9413.95,6401.68Zm-539.49,999.05h159.85c0-125.88,103.9-229.78,229.78-229.78s229.78,103.9,229.78,229.78h159.85c0-213.8-175.83-389.63-389.63-389.63S8874.46,7186.93,8874.46,7400.73Z"></path></svg></span>
     <span>Ideas that move.</span>
@@ -750,7 +740,17 @@ document.querySelectorAll("video[data-play]").forEach(v => vio.observe(v));
 
 /* ---------- Header ---------- */
 const nav = document.getElementById("nav");
-const onScrollNav = () => nav.classList.toggle("solid", window.scrollY > 40);
+const themed = [...document.querySelectorAll("section.theme-dark, section.theme-light, footer.theme-dark")];
+const onScrollNav = () => {
+  nav.classList.toggle("solid", window.scrollY > 40);
+  const y = 38 + (parseFloat(getComputedStyle(nav).paddingTop) || 0);
+  const under = themed.find(el => { const r = el.getBoundingClientRect(); return r.top <= y && r.bottom > y; });
+  const light = under ? under.classList.contains("theme-light") : false;
+  nav.classList.toggle("theme-light", light);
+  nav.classList.toggle("theme-dark", !light);
+};
+addEventListener("resize", () => onScrollNav());
+if (window.ScrollTrigger) ScrollTrigger.addEventListener("refresh", () => onScrollNav());
 addEventListener("scroll", onScrollNav, { passive: true }); onScrollNav();
 
 /* ---------- Motion ---------- */
@@ -1090,7 +1090,7 @@ void main() {
     saturation: 1, hue: 6.28, vignette: 0, blur: 0.016, drift: 0.03, seed: 1, rotation: 0 };
   const darkMQ = matchMedia("(prefers-color-scheme: dark)");
   const reducedMQ = matchMedia("(prefers-reduced-motion: reduce)");
-  const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === "dark" : darkMQ.matches; };
+  const isDark = () => true; // the hero is always a dark section
   const look = () => isDark()
     ? { palette: ["#101010", "#3A3A3A"], brightness: -0.1, contrast: 0.91, grain: 0.16 }
     : { palette: ["#E7E2D6", "#FAF7F0"], brightness: 0, contrast: 1, grain: 0.07 };
