@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Aquarela · Motion for fashion brands</title>
 <meta name="description" content="Motion-first social content for fashion brands: short videos, animated carousels and ad creatives, made for you every month.">
-<meta name="theme-color" content="#F4F1EA">
+<meta name="theme-color" content="#141414">
 <link rel="icon" href="/moda/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Aquarela · Motion for fashion brands">
@@ -321,16 +321,138 @@ footer .logo{width:120px;color:var(--ink)}
 @media (prefers-reduced-motion:reduce){
   .sticker .float,.scroll-hint i::after,.post.alive .sweep,.post.alive .dot{animation:none}
 }
+
+/* ================= v2: studio polish ================= */
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--graphite)}
+.eyebrow::before{content:"";width:28px;height:1.5px;background:currentColor}
+em.serif,.serif{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;letter-spacing:-.01em}
+
+/* intro curtain (first visit of the session) */
+.intro{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:#141414;color:#F4F1EA;pointer-events:none}
+.intro .intro-logo{width:min(46vw,340px);overflow:hidden}
+.intro .intro-logo svg{display:block;width:100%;height:auto}
+.intro .intro-line{position:absolute;left:0;bottom:0;height:3px;width:100%;background:linear-gradient(90deg,#F6B3CB,#F7DF8E,#3DBADB);transform-origin:0 50%;transform:scaleX(0)}
+.intro .intro-tag{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:#B9B4AA}
+html.intro-on body{overflow:hidden}
+
+/* cursor label for media */
+.cursor{position:fixed;left:0;top:0;z-index:150;pointer-events:none;display:grid;place-items:center;width:92px;height:92px;margin:-46px 0 0 -46px;border-radius:50%;background:#F4F1EA;color:#141414;font:700 13px Archivo,sans-serif;letter-spacing:.08em;text-transform:uppercase;transform:scale(0);opacity:0;mix-blend-mode:normal;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.cursor span{display:flex;align-items:center;gap:6px}
+@media (hover:none),(pointer:coarse){.cursor{display:none}}
+
+/* ---------- selected work wall ---------- */
+.wall{position:relative;z-index:1;padding:130px 0 70px;overflow:hidden}
+.wall-head{display:grid;grid-template-columns:1.25fr 1fr;gap:6vw;align-items:end}
+.wall-title{font-size:clamp(48px,7.4vw,124px);letter-spacing:-.05em;line-height:.9;margin-top:18px}
+.wall-title .serif{display:block;font-size:1.04em;letter-spacing:-.02em;line-height:.95}
+.wall-head .lede{max-width:26em}
+.wall-count{display:flex;gap:34px;margin-top:28px}
+.wall-count div{display:flex;flex-direction:column}
+.wall-count b{white-space:nowrap;font-size:clamp(34px,3.4vw,52px);font-weight:800;letter-spacing:-.04em;line-height:1}
+.wall-count span{font-size:14px;color:var(--graphite);margin-top:6px}
+.wall-stage{position:relative;margin-top:70px;height:min(132vh,1250px);perspective:1600px;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 12%,#000 88%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 12%,#000 88%,transparent 100%)}
+.wall-grid{position:absolute;left:50%;top:0;width:min(1500px,112vw);display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.8vw,28px);transform-origin:50% 30%;translate:-50% 0}
+.wall-col{display:flex;flex-direction:column;gap:clamp(14px,1.8vw,28px);will-change:transform}
+.tile{position:relative;display:block;width:100%;padding:0;border:0;border-radius:18px;overflow:hidden;background:#222;cursor:pointer;aspect-ratio:var(--ar,9/16);box-shadow:0 30px 60px -20px rgba(20,20,20,.45);transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .5s;color:#fff;text-align:left;font:inherit}
+.tile video,.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .9s cubic-bezier(.22,1,.36,1)}
+.tile::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,.72),transparent 42%);opacity:.0;transition:opacity .4s}
+.tile .cap{position:absolute;left:16px;right:16px;bottom:14px;z-index:1;display:flex;flex-direction:column;gap:2px;transform:translateY(10px);opacity:0;transition:transform .45s cubic-bezier(.22,1,.36,1),opacity .35s}
+.tile .cap b{font-size:17px;letter-spacing:-.01em}
+.tile .cap i{font-style:normal;font-size:13px;opacity:.82}
+.tile:hover,.tile:focus-visible{transform:translateY(-6px) scale(1.02);box-shadow:0 40px 80px -24px rgba(20,20,20,.6);z-index:2}
+.tile:hover video,.tile:focus-visible video{transform:scale(1.05)}
+.tile:hover::after,.tile:focus-visible::after{opacity:1}
+.tile:hover .cap,.tile:focus-visible .cap{transform:none;opacity:1}
+.tile .tag{position:absolute;top:12px;left:12px;z-index:1;padding:5px 10px;border-radius:999px;background:rgba(20,20,20,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);font-size:12px;font-weight:600;letter-spacing:.04em}
+.wall .disclaimer{margin-top:40px}
+
+/* ---------- case: Black Friday ---------- */
+.case{position:relative;z-index:1;padding:140px 0 120px;overflow:hidden;isolation:isolate}
+.case-glow{position:absolute;left:62%;top:45%;width:min(120vw,1500px);aspect-ratio:1;translate:-50% -50%;border-radius:50%;background:radial-gradient(closest-side,rgba(168,22,30,.55),rgba(120,14,22,.22) 45%,transparent 70%);z-index:-1;pointer-events:none;opacity:.35;scale:.6}
+.case-bg{position:absolute;left:0;right:0;top:50%;translate:0 -50%;z-index:-1;pointer-events:none;white-space:nowrap;font-weight:800;font-size:clamp(140px,21vw,360px);letter-spacing:-.06em;line-height:.8;color:transparent;-webkit-text-stroke:1.5px rgba(244,241,234,.09)}
+.case-grid{display:grid;grid-template-columns:1.05fr minmax(260px,400px);gap:7vw;align-items:start}
+.case h2{font-size:clamp(46px,6vw,100px);letter-spacing:-.05em;line-height:.92;margin-top:18px}
+.case h2 .serif{color:#F2A3A0}
+.case .lede{margin-top:26px;max-width:30em}
+.beats{list-style:none;margin:56px 0 0;padding:0;border-top:1px solid var(--line)}
+.beats li{display:grid;grid-template-columns:70px 1fr;gap:20px;padding:20px 0;border-bottom:1px solid var(--line);cursor:pointer;transition:opacity .35s;opacity:.45}
+.beats li.on{opacity:1}
+.beats time{font-variant-numeric:tabular-nums;font-weight:600;font-size:15px;color:var(--graphite);padding-top:5px}
+.beats b{display:block;font-size:clamp(22px,2vw,30px);letter-spacing:-.02em;line-height:1.1}
+.beats span{display:block;margin-top:6px;color:var(--graphite);font-size:16px}
+.beats li.on time{color:#F2A3A0}
+.case-specs{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
+.case-specs span{padding:9px 14px;border-radius:999px;box-shadow:inset 0 0 0 1.5px var(--line);font-size:14px;font-weight:600}
+.case-phone{position:sticky;top:104px;justify-self:center;width:min(100%,calc((100svh - 230px) * .5625 + 22px))}
+.device{position:relative;border-radius:44px;padding:11px;background:#0b0b0b;box-shadow:0 0 0 1.5px rgba(244,241,234,.12),0 60px 120px -30px rgba(0,0,0,.8),0 0 120px -20px rgba(168,22,30,.45)}
+.device video{display:block;width:100%;aspect-ratio:9/16;border-radius:34px;object-fit:cover;background:#111}
+.device .notch{position:absolute;top:22px;left:50%;width:30%;height:22px;translate:-50% 0;border-radius:20px;background:#0b0b0b;z-index:1}
+.case-bar{position:relative;height:3px;margin:22px 6px 0;border-radius:3px;background:rgba(244,241,234,.14);overflow:hidden}
+.case-bar i{position:absolute;inset:0;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,#F2A3A0,#F7DF8E)}
+.case-ctl{display:flex;justify-content:space-between;align-items:center;margin:16px 6px 0;font-size:14px;color:var(--graphite)}
+.case-ctl button{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;border-radius:999px;border:0;background:var(--ink);color:var(--paper);font:600 14px Archivo,sans-serif;cursor:pointer}
+
+/* ---------- lightbox ---------- */
+.lb{position:fixed;inset:0;z-index:180;display:grid;place-items:center;background:rgba(12,12,12,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#F4F1EA}
+.lb[hidden]{display:none}
+.lb-stage{position:relative;height:min(84svh,960px);max-width:92vw;aspect-ratio:var(--ar,9/16);border-radius:22px;overflow:hidden;background:#000;box-shadow:0 40px 120px rgba(0,0,0,.6)}
+.lb-stage video{width:100%;height:100%;object-fit:contain;background:#000}
+.lb-info{position:absolute;left:28px;bottom:26px;display:flex;flex-direction:column;gap:4px;max-width:30vw}
+.lb-info b{font-size:22px;letter-spacing:-.02em}
+.lb-info span{font-size:14px;color:#B9B4AA}
+.lb-close{position:absolute;top:22px;right:22px;width:52px;height:52px;border-radius:50%;border:0;background:#F4F1EA;color:#141414;font-size:26px;line-height:1;cursor:pointer}
+.lb-nav{position:absolute;top:50%;translate:0 -50%;width:52px;height:52px;border-radius:50%;border:1.5px solid rgba(244,241,234,.4);background:transparent;color:#F4F1EA;font-size:22px;cursor:pointer}
+.lb-prev{left:22px}.lb-next{right:22px}
+
+@media (max-width:1000px){
+  .wall-head,.case-grid{grid-template-columns:1fr}
+  .case-phone{position:relative;top:0;max-width:340px;margin:44px auto 0;order:1}
+  .case-grid{row-gap:0}
+  .case-grid>div:first-child{display:contents}
+  .beats{order:2}
+  .case-specs{order:3}
+  .lb-info{position:static;margin-top:16px;max-width:none;text-align:center}
+  .lb{grid-template-rows:1fr auto;padding:70px 0 30px}
+}
+@media (max-width:760px){
+  .wall{padding:90px 0 50px}
+  .wall-stage{height:auto;margin-top:44px;-webkit-mask-image:none;mask-image:none;perspective:none}
+  .wall-grid{position:relative;left:auto;translate:none;width:calc(100% - 32px);margin:0 auto;grid-template-columns:1fr 1fr;gap:12px}
+  .wall-col{gap:12px}
+  .tile{border-radius:14px}
+  .tile .cap{display:none}
+  .tile::after{display:none}
+  .tile .cap b{font-size:14px}.tile .cap i{font-size:12px}
+  .case{padding:90px 0}
+  .case-bg{font-size:42vw}
+  .beats li{grid-template-columns:52px 1fr}
+  .lb-nav{display:none}
+  .lb-stage{height:min(74svh,760px)}
+}
+@media (prefers-reduced-motion:reduce){
+  .tile,.tile video{transition:none}
+}
+.intro{display:none}
+html.intro-on .intro{display:grid}
 </style>
+<script>try{if(!sessionStorage.getItem("aq_intro")&&!matchMedia("(prefers-reduced-motion: reduce)").matches){document.documentElement.classList.add("intro-on");setTimeout(function(){document.documentElement.classList.remove("intro-on")},4500)}}catch(e){}</script>
 </head>
 <body>
+<div class="intro" id="intro" aria-hidden="true"><div class="intro-logo"></div><i class="intro-line"></i><span class="intro-tag">Motion for fashion brands</span></div>
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Watch the piece">
+  <div class="lb-stage"><video id="lbVideo" playsinline controls loop></video></div>
+  <div class="lb-info"><b id="lbTitle"></b><span id="lbMeta"></span></div>
+  <button class="lb-nav lb-prev" type="button" aria-label="Previous piece">&#8592;</button>
+  <button class="lb-nav lb-next" type="button" aria-label="Next piece">&#8594;</button>
+  <button class="lb-close" type="button" aria-label="Close">&times;</button>
+</div>
 
 <header class="nav" id="nav">
   <div class="wrap">
     <a class="logo" href="#top" aria-label="Aquarela, back to top"><svg role="img" aria-label="Aquarela" xmlns="http://www.w3.org/2000/svg" viewBox="320.5 1045.1 7392.9 1798.3"><path fill-rule="evenodd" fill="currentColor" transform="translate(-2200 -4957)" d="M2940.12,6002.06l-419.6,1398.67h167.84L3060,6161.91c197.82,0,339.68,161.85,339.68,359.66v881.16h159.85V6521.57c0-285.73-213.8-519.51-499.53-519.51H2940.12Zm69.93,1009.04c0,59.94,47.96,109.9,111.9,109.9,57.94,0,107.89-49.96,107.89-109.9s-49.95-109.9-107.89-109.9C3058.01,6901.2,3010.05,6951.16,3010.05,7011.1Zm1688.39-609.42h-519.5c-285.73,0-519.51,213.8-519.51,499.52s233.78,499.53,519.51,499.53H4538.6v399.62h159.84V6401.68Zm-159.84,839.2H4178.94c-197.81,0-359.66-141.86-359.66-339.68s161.85-339.67,359.66-339.67H4538.6v679.35Zm259.75-839.2V6901.2c0,285.73,213.79,519.51,499.52,519.51s499.53-233.78,499.53-519.51V6401.68H5637.55V6901.2c0,197.82-141.87,359.66-339.68,359.66S4958.2,7099.02,4958.2,6901.2V6401.68H4798.35Zm1538.53,0H6055.15v159.85h281.73c197.81,0,339.68,161.84,339.68,359.66v479.54h159.85V6921.19C6836.41,6635.46,6622.61,6401.68,6336.88,6401.68ZM5797.4,7400.73h159.84c0-125.88,103.9-229.78,229.78-229.78s229.79,103.9,229.79,229.78h159.84c0-213.8-175.83-389.63-389.63-389.63S5797.4,7186.93,5797.4,7400.73Zm1638.43-999.05c-285.72,0-499.52,233.78-499.52,519.51v479.54h159.85V6921.19c0-197.82,141.86-359.66,339.67-359.66V6401.68Zm209.8,419.6c35.97-159.85,179.83-279.73,349.67-279.73s313.7,119.88,349.67,279.73H7645.63Zm349.67,439.58c-169.84,0-313.7-119.88-349.67-279.73h869.18V6901.2c0-285.72-233.78-519.5-519.51-519.5s-519.5,233.78-519.5,519.5,233.77,519.51,519.5,519.51V7260.86Zm619.41-1258.8V7400.73h159.85V6002.06H8614.71Zm799.24,399.62H9132.22v159.85h281.73c197.81,0,339.68,161.84,339.68,359.66v479.54h159.84V6921.19C9913.47,6635.46,9699.68,6401.68,9413.95,6401.68Zm-539.49,999.05h159.85c0-125.88,103.9-229.78,229.78-229.78s229.78,103.9,229.78,229.78h159.85c0-213.8-175.83-389.63-389.63-389.63S8874.46,7186.93,8874.46,7400.73Z"></path></svg></a>
     <nav aria-label="Sections">
       <ul>
-        <li><a href="#work">Work</a></li>
+        <li><a href="#wall">Work</a></li>
         <li><a href="#packages">Packages</a></li>
         <li><a href="#sprint">Sprint</a></li>
         <li><a href="#founding">Founding Five</a></li>
@@ -345,14 +467,14 @@ footer .logo{width:120px;color:var(--ink)}
 <section class="hero theme-dark" id="top">
   <canvas class="hero-fx" id="heroFx" aria-hidden="true"></canvas>
   <div class="hero-cards" aria-hidden="true">
-    <div class="sticker c1" data-depth="0.5" style="--r:20px"><div class="float" style="--bob:6.5s"><div class="pt"><i class="h1"></i><i class="h2"></i><div class="face"><video data-play muted loop playsinline preload="metadata" poster="/moda/images/77ae92a049.webp" src="/moda/media/loop_wall.mp4"></video></div></div></div></div>
-    <div class="sticker c2 m-show" data-depth="0.9" style="--r:16px"><div class="float" style="--bob:8s"><div class="pt"><i class="h1"></i><i class="h2"></i><div class="face"><img src="/moda/images/1f6ebaec5d.webp" alt=""></div></div></div></div>
+    <div class="sticker c1" data-depth="0.5" style="--r:20px"><div class="float" style="--bob:6.5s"><div class="pt"><i class="h1"></i><i class="h2"></i><div class="face"><video data-play muted loop playsinline preload="metadata" poster="/moda/images/work/blackfriday.webp" src="/moda/media/work/h-blackfriday.mp4"></video></div></div></div></div>
+    <div class="sticker c2 m-show" data-depth="0.9" style="--r:16px"><div class="float" style="--bob:8s"><div class="pt"><i class="h1"></i><i class="h2"></i><div class="face"><video data-play muted loop playsinline preload="metadata" poster="/moda/images/work/gift.webp" src="/moda/media/work/h-gift.mp4"></video></div></div></div></div>
     <div class="sticker c3 m-hide" data-depth="1.3" style="--r:999px"><div class="float" style="--bob:5s"><div class="pt"><i class="h1"></i><i class="h2"></i><div class="face"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="#141414" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Added to bag</div></div></div></div>
     <div class="sticker c4 m-hide" data-depth="0.7" style="--r:16px"><div class="float" style="--bob:8.5s"><div class="pt"><i class="h1"></i><i class="h2"></i><div class="face"><img src="/moda/images/5255a78c80.webp" alt=""></div></div></div></div>
     <div class="sticker c5 m-hide" data-depth="0.4" style="--r:16px"><div class="float" style="--bob:9s"><div class="pt"><i class="h1"></i><i class="h2"></i><div class="face"><video data-play muted loop playsinline preload="metadata" poster="/moda/images/5ea020e980.webp" src="/moda/media/loop_orbit.mp4"></video></div></div></div></div>
     <div class="sticker c6 m-hide" data-depth="1.1" style="--r:18px"><div class="float" style="--bob:6s"><div class="pt"><i class="h1"></i><i class="h2"></i><div class="face"><img src="/moda/images/af6071b406.webp" alt="" style="width:78%;height:auto;object-fit:contain"></div></div></div></div>
-    <div class="sticker c7" data-depth="0.8" style="--r:20px"><div class="float" style="--bob:7.5s"><div class="pt"><i class="h1"></i><i class="h2"></i><div class="face"><video data-play muted loop playsinline preload="metadata" poster="/moda/images/ff981045a9.webp" src="/moda/media/loop_golden.mp4"></video></div></div></div></div>
-    <div class="sticker c8 m-hide" data-depth="1" style="--r:20px"><div class="float" style="--bob:7s"><div class="pt"><i class="h1"></i><i class="h2"></i><div class="face"><video data-play muted loop playsinline preload="metadata" poster="/moda/images/bcf4020348.webp" src="/moda/media/loop_phones.mp4"></video></div></div></div></div>
+    <div class="sticker c7" data-depth="0.8" style="--r:20px"><div class="float" style="--bob:7.5s"><div class="pt"><i class="h1"></i><i class="h2"></i><div class="face"><video data-play muted loop playsinline preload="metadata" poster="/moda/images/work/verso.webp" src="/moda/media/work/h-verso.mp4"></video></div></div></div></div>
+    <div class="sticker c8 m-hide" data-depth="1" style="--r:20px"><div class="float" style="--bob:7s"><div class="pt"><i class="h1"></i><i class="h2"></i><div class="face"><video data-play muted loop playsinline preload="metadata" poster="/moda/images/work/coldsnap.webp" src="/moda/media/work/h-coldsnap.mp4"></video></div></div></div></div>
   </div>
   <div class="wrap">
     <div class="hero-title">
@@ -423,6 +545,73 @@ footer .logo{width:120px;color:var(--ink)}
   </div>
 </section>
 
+<!-- SELECTED WORK -->
+<section class="wall theme-light" id="wall">
+  <div class="wrap wall-head">
+    <div>
+      <p class="eyebrow">Selected work</p>
+      <h2 class="wall-title">Made for the feed. <span class="serif">Built to sell.</span></h2>
+    </div>
+    <div>
+      <p class="lede">Lookbooks, product drops, gift guides and sale campaigns, cut for Reels, TikTok and the feed. Tap any piece to watch it full screen.</p>
+      <div class="wall-count"><div><b>12</b><span>pieces on this wall</span></div><div><b>3</b><span>formats: 9:16, 4:5, 3:4</span></div><div><b>5–30s</b><span>per piece</span></div></div>
+    </div>
+  </div>
+  <div class="wall-stage">
+    <div class="wall-grid" id="wallGrid">
+      <div class="wall-col c1">
+        <button class="tile" type="button" style="--ar:9/16" data-cursor="Watch" data-src="/moda/media/work/verso.mp4" data-poster="/moda/images/work/verso.webp" data-title="Verso Denim" data-meta="FW26 lookbook · Reel 10s" aria-label="Watch: Verso Denim"><video data-play muted loop playsinline preload="none" poster="/moda/images/work/verso.webp" src="/moda/media/work/verso.mp4"></video><span class="tag">Lookbook</span><span class="cap"><b>Verso Denim</b><i>FW26 lookbook · Reel 10s</i></span></button>
+        <button class="tile" type="button" style="--ar:3/4" data-cursor="Watch" data-src="/moda/media/work/gift.mp4" data-poster="/moda/images/work/gift.webp" data-title="Oren Studio" data-meta="Holiday gift guide · Carousel" aria-label="Watch: Oren Studio"><video data-play muted loop playsinline preload="none" poster="/moda/images/work/gift.webp" src="/moda/media/work/gift.mp4"></video><span class="tag">Gift guide</span><span class="cap"><b>Oren Studio</b><i>Holiday gift guide · Carousel</i></span></button>
+        <button class="tile" type="button" style="--ar:9/16" data-cursor="Watch" data-src="/moda/media/work/anatomy.mp4" data-poster="/moda/images/work/anatomy.webp" data-title="Fernley Supply Co." data-meta="Anatomy of an ad · Reel 20s" aria-label="Watch: Fernley Supply Co."><video data-play muted loop playsinline preload="none" poster="/moda/images/work/anatomy.webp" src="/moda/media/work/anatomy.mp4"></video><span class="tag">Explainer</span><span class="cap"><b>Fernley Supply Co.</b><i>Anatomy of an ad · Reel 20s</i></span></button>
+      </div>
+      <div class="wall-col c2">
+        <button class="tile" type="button" style="--ar:9/16" data-cursor="Watch" data-src="/moda/media/work/blackfriday.mp4" data-poster="/moda/images/work/blackfriday.webp" data-title="Black Friday" data-meta="Sale campaign · Reel 15s · sound on" aria-label="Watch: Black Friday"><video data-play muted loop playsinline preload="none" poster="/moda/images/work/blackfriday.webp" src="/moda/media/work/blackfriday.mp4"></video><span class="tag">Campaign</span><span class="cap"><b>Black Friday</b><i>Sale campaign · Reel 15s · sound on</i></span></button>
+        <button class="tile" type="button" style="--ar:3/4" data-cursor="Watch" data-src="/moda/media/work/saltline.mp4" data-poster="/moda/images/work/saltline.webp" data-title="Saltline Swim" data-meta="Back in stock · Carousel" aria-label="Watch: Saltline Swim"><video data-play muted loop playsinline preload="none" poster="/moda/images/work/saltline.webp" src="/moda/media/work/saltline.mp4"></video><span class="tag">Restock</span><span class="cap"><b>Saltline Swim</b><i>Back in stock · Carousel</i></span></button>
+        <button class="tile" type="button" style="--ar:4/5" data-cursor="Watch" data-src="/moda/media/work/showcase.mp4" data-poster="/moda/images/work/showcase.webp" data-title="Motion for social" data-meta="Activewear showcase · Feed 4:5" aria-label="Watch: Motion for social"><video data-play muted loop playsinline preload="none" poster="/moda/images/work/showcase.webp" src="/moda/media/work/showcase.mp4"></video><span class="tag">Showcase</span><span class="cap"><b>Motion for social</b><i>Activewear showcase · Feed 4:5</i></span></button>
+      </div>
+      <div class="wall-col c3">
+        <button class="tile" type="button" style="--ar:9/16" data-cursor="Watch" data-src="/moda/media/work/coldsnap.mp4" data-poster="/moda/images/work/coldsnap.webp" data-title="Drop 05 · Cold Snap" data-meta="Product drop · Reel 10s" aria-label="Watch: Drop 05 · Cold Snap"><video data-play muted loop playsinline preload="none" poster="/moda/images/work/coldsnap.webp" src="/moda/media/work/coldsnap.mp4"></video><span class="tag">Drop</span><span class="cap"><b>Drop 05 · Cold Snap</b><i>Product drop · Reel 10s</i></span></button>
+        <button class="tile" type="button" style="--ar:3/4" data-cursor="Watch" data-src="/moda/media/work/samephoto.mp4" data-poster="/moda/images/work/samephoto.webp" data-title="Fernley Supply Co." data-meta="Same photo, different result · Carousel" aria-label="Watch: Fernley Supply Co."><video data-play muted loop playsinline preload="none" poster="/moda/images/work/samephoto.webp" src="/moda/media/work/samephoto.mp4"></video><span class="tag">Before / after</span><span class="cap"><b>Fernley Supply Co.</b><i>Same photo, different result · Carousel</i></span></button>
+        <button class="tile" type="button" style="--ar:9/16" data-cursor="Watch" data-src="/moda/media/work/buildlook.mp4" data-poster="/moda/images/work/buildlook.webp" data-title="Fernley Supply Co." data-meta="Build your look · Reel 15s" aria-label="Watch: Fernley Supply Co."><video data-play muted loop playsinline preload="none" poster="/moda/images/work/buildlook.webp" src="/moda/media/work/buildlook.mp4"></video><span class="tag">Shoppable</span><span class="cap"><b>Fernley Supply Co.</b><i>Build your look · Reel 15s</i></span></button>
+      </div>
+      <div class="wall-col c4">
+        <button class="tile" type="button" style="--ar:9/16" data-cursor="Watch" data-src="/moda/media/reel_v.mp4" data-poster="/moda/images/1552b6d61a.webp" data-title="Fernley Supply Co." data-meta="Brand reel · 30s" aria-label="Watch: Fernley Supply Co."><video data-play muted loop playsinline preload="none" poster="/moda/images/1552b6d61a.webp" src="/moda/media/reel_v.mp4"></video><span class="tag">Brand reel</span><span class="cap"><b>Fernley Supply Co.</b><i>Brand reel · 30s</i></span></button>
+        <button class="tile" type="button" style="--ar:9/16" data-cursor="Watch" data-src="/moda/media/loop_products.mp4" data-poster="/moda/images/871c114a06.webp" data-title="Fernley Supply Co." data-meta="Product grid · Loop" aria-label="Watch: Fernley Supply Co."><video data-play muted loop playsinline preload="none" poster="/moda/images/871c114a06.webp" src="/moda/media/loop_products.mp4"></video><span class="tag">Catalog</span><span class="cap"><b>Fernley Supply Co.</b><i>Product grid · Loop</i></span></button>
+        <button class="tile" type="button" style="--ar:9/16" data-cursor="Watch" data-src="/moda/media/loop_wall.mp4" data-poster="/moda/images/77ae92a049.webp" data-title="Fernley Supply Co." data-meta="Lookbook wall · Loop" aria-label="Watch: Fernley Supply Co."><video data-play muted loop playsinline preload="none" poster="/moda/images/77ae92a049.webp" src="/moda/media/loop_wall.mp4"></video><span class="tag">Lookbook</span><span class="cap"><b>Fernley Supply Co.</b><i>Lookbook wall · Loop</i></span></button>
+      </div>
+    </div>
+  </div>
+  <p class="wrap disclaimer">Concept work for fictional brands. Images and footage were generated with AI.</p>
+</section>
+
+<!-- CASE: BLACK FRIDAY -->
+<section class="case theme-dark" id="case">
+  <div class="case-glow" aria-hidden="true"></div>
+  <div class="case-bg" aria-hidden="true">BLACK FRIDAY · BLACK FRIDAY</div>
+  <div class="wrap case-grid">
+    <div>
+      <p class="eyebrow">Case 01 · Black Friday</p>
+      <h2>Fifteen seconds to <span class="serif">sell a sale.</span></h2>
+      <p class="lede">Our own Black Friday spot, built the way we would build yours: a hook before the thumb moves, product in hand by second eight, the offer while attention peaks.</p>
+      <ol class="beats">
+        <li data-t="0"><time>0:00</time><div><b>The hook</b><span>“Static gets skipped.” Type lands before the first swipe.</span></div></li>
+        <li data-t="2"><time>0:02</time><div><b>The tension</b><span>The feed won’t wait, so the cut doesn’t either.</span></div></li>
+        <li data-t="5"><time>0:05</time><div><b>The motion</b><span>A walk, a turn, a scarf in the wind. Fashion that moves.</span></div></li>
+        <li data-t="8"><time>0:08</time><div><b>The product</b><span>The bag, in hand, on the beat.</span></div></li>
+        <li data-t="10"><time>0:10</time><div><b>The offer</b><span>Black Friday lands at peak attention.</span></div></li>
+        <li data-t="11"><time>0:11</time><div><b>The ask</b><span>A question your customer answers with a tap.</span></div></li>
+      </ol>
+      <div class="case-specs"><span>9:16 · 15s</span><span>Reels · TikTok · Stories</span><span>Reads with sound off</span><span>Built from 5 shots</span></div>
+    </div>
+    <div class="case-phone">
+      <div class="device" data-cursor="Sound"><i class="notch"></i><video id="caseVideo" data-play muted loop playsinline preload="metadata" poster="/moda/images/work/blackfriday.webp" src="/moda/media/work/blackfriday.mp4" aria-label="Aquarela Black Friday spot, 15 seconds"></video></div>
+      <div class="case-bar"><i></i></div>
+      <div class="case-ctl"><span id="caseClock">0:00 / 0:15</span><button id="caseSound" type="button" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Play with sound</span></button></div>
+    </div>
+  </div>
+</section>
+
+
 <!-- THE WORK -->
 <section class="work theme-light" id="work">
   <div class="wrap">
@@ -432,7 +621,7 @@ footer .logo{width:120px;color:var(--ink)}
     </div>
   </div>
   <div class="reel-wrap">
-    <div class="reel" id="reel">
+    <div class="reel" id="reel" data-cursor="Watch">
       <video id="showreel" data-play muted loop playsinline preload="metadata" poster="/moda/images/3314b9e302.webp" src="/moda/media/showreel_h.mp4"></video>
       <button class="sound" id="sound" type="button" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path id="wave" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".3"/></svg><span>Sound on</span></button>
     </div>
@@ -779,7 +968,7 @@ if (reduce || !window.gsap || !window.ScrollTrigger) {
   // smooth scroll (optional)
   let lenis = null;
   if (window.Lenis) {
-    lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    lenis = new Lenis({ lerp: 0.1, smoothWheel: true }); window.__lenis = lenis;
     lenis.on("scroll", ScrollTrigger.update);
     gsap.ticker.add(t => lenis.raf(t * 1000));
     gsap.ticker.lagSmoothing(0);
@@ -792,7 +981,7 @@ if (reduce || !window.gsap || !window.ScrollTrigger) {
   }
 
   // hero intro: one orchestrated moment
-  const intro = gsap.timeline({ defaults: { ease: "expo.out" } });
+  const intro = gsap.timeline({ defaults: { ease: "expo.out" }, delay: document.documentElement.classList.contains("intro-on") ? 1.2 : 0 });
   intro.from(".hero h1 .w", { yPercent: 110, duration: 1.2, stagger: 0.09 })
        .from(".hero .sub > *", { y: 24, opacity: 0, duration: 1, stagger: 0.08 }, 0.35)
        .from(".hero-cards .sticker .pt", { scale: 0.6, opacity: 0, rotate: () => gsap.utils.random(-14, 14), duration: 1.1, stagger: 0.06 }, 0.2)
@@ -1286,6 +1475,150 @@ void main() {
   // runs while the section is on screen (it stays on screen the whole time the section is pinned)
   if ("IntersectionObserver" in window) new IntersectionObserver(es => es[0].isIntersecting ? start() : stop()).observe(host);
   else start();
+})();
+</script>
+<script>
+/* ---------- v2: intro, work wall, case, lightbox, cursor ---------- */
+(function(){
+  const html = document.documentElement;
+  const intro = document.getElementById("intro");
+  if (!window.gsap) { if (intro) intro.remove(); html.classList.remove("intro-on"); return; }
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const lenis = () => window.__lenis || null;
+
+  /* intro curtain: once per session */
+  if (intro) {
+    if (html.classList.contains("intro-on")) {
+      const logo = document.querySelector(".nav .logo svg");
+      if (logo) intro.querySelector(".intro-logo").appendChild(logo.cloneNode(true));
+      try { sessionStorage.setItem("aq_intro", "1"); } catch (e) {}
+      gsap.timeline({ onComplete: () => { intro.remove(); html.classList.remove("intro-on"); if (window.ScrollTrigger) ScrollTrigger.refresh(); } })
+        .from(".intro-logo svg", { yPercent: 110, duration: 0.85, ease: "expo.out" }, 0.05)
+        .to(".intro-line", { scaleX: 1, duration: 0.95, ease: "power2.inOut" }, 0)
+        .from(".intro-tag", { opacity: 0, y: 10, duration: 0.5 }, 0.3)
+        .to(intro, { yPercent: -100, duration: 0.8, ease: "expo.inOut" }, 1.0);
+    } else intro.remove();
+  }
+
+  /* cursor label over media */
+  if (fine && !reduce) {
+    const c = document.createElement("div");
+    c.className = "cursor"; c.setAttribute("aria-hidden", "true");
+    c.innerHTML = '<span><svg width="11" height="12" viewBox="0 0 11 12"><path d="M0 0l11 6-11 6z" fill="currentColor"/></svg><em></em></span>';
+    document.body.appendChild(c);
+    const label = c.querySelector("em"); label.style.fontStyle = "normal";
+    const xTo = gsap.quickTo(c, "x", { duration: 0.35, ease: "power3" }), yTo = gsap.quickTo(c, "y", { duration: 0.35, ease: "power3" });
+    addEventListener("pointermove", e => { xTo(e.clientX); yTo(e.clientY); }, { passive: true });
+    document.querySelectorAll("[data-cursor]").forEach(el => {
+      el.addEventListener("pointerenter", () => { label.textContent = el.dataset.cursor; gsap.to(c, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2)" }); });
+      el.addEventListener("pointerleave", () => gsap.to(c, { scale: 0, opacity: 0, duration: 0.25, ease: "power2.in" }));
+    });
+  }
+
+  /* headline reveals */
+  if (!reduce && window.ScrollTrigger) {
+    gsap.utils.toArray(".wall-title, .case h2, .work .head h2, .packages h2, .sprint h2, .founding h2, .how h2, .faq h2, .contact h2").forEach(h => {
+      gsap.from(h, { y: 70, opacity: 0, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: h, start: "top 88%", once: true } });
+    });
+    gsap.from(".wall-count > div", { y: 30, opacity: 0, duration: 0.9, stagger: 0.08, ease: "expo.out", scrollTrigger: { trigger: ".wall-count", start: "top 90%", once: true } });
+  }
+
+  /* work wall: unfolds from a tilt, columns drift in opposite directions */
+  const stage = document.querySelector(".wall-stage"), grid = document.getElementById("wallGrid");
+  if (stage && grid && window.ScrollTrigger) {
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 761px) and (prefers-reduced-motion: no-preference)", () => {
+      gsap.fromTo(grid, { rotateX: 26, rotateZ: -9, scale: 1.14, y: 60 },
+        { rotateX: 0, rotateZ: 0, scale: 1, y: 0, ease: "none", scrollTrigger: { trigger: stage, start: "top 100%", end: "top 12%", scrub: 0.8 } });
+      const travel = col => Math.max(0, col.offsetHeight - stage.offsetHeight + 140);
+      gsap.utils.toArray(".wall-col").forEach((col, i) => {
+        const down = i % 2 === 1;
+        gsap.fromTo(col, { y: () => (down ? -travel(col) : 0) }, { y: () => (down ? 0 : -travel(col)), ease: "none",
+          scrollTrigger: { trigger: stage, start: "top bottom", end: "bottom top", scrub: 0.6, invalidateOnRefresh: true } });
+      });
+    });
+  }
+
+  /* lightbox for the wall */
+  const tiles = [...document.querySelectorAll(".tile")];
+  const lb = document.getElementById("lb");
+  if (lb && tiles.length) {
+    const v = document.getElementById("lbVideo"), st = lb.querySelector(".lb-stage");
+    const tEl = document.getElementById("lbTitle"), mEl = document.getElementById("lbMeta");
+    let idx = 0, back = null;
+    const show = i => {
+      idx = (i + tiles.length) % tiles.length;
+      const t = tiles[idx];
+      st.style.setProperty("--ar", getComputedStyle(t).getPropertyValue("--ar").trim() || "9/16");
+      v.poster = t.dataset.poster || ""; v.src = t.dataset.src; v.muted = false;
+      const p = v.play(); if (p) p.catch(() => { v.muted = true; v.play().catch(() => {}); });
+      tEl.textContent = t.dataset.title || ""; mEl.textContent = t.dataset.meta || "";
+      if (!reduce) gsap.fromTo(st, { scale: 0.92, opacity: 0, y: 24 }, { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: "expo.out" });
+    };
+    const open = i => {
+      back = document.activeElement; lb.hidden = false;
+      html.style.overflow = "hidden"; if (lenis()) lenis().stop();
+      if (!reduce) gsap.fromTo(lb, { opacity: 0 }, { opacity: 1, duration: 0.35 });
+      show(i); lb.querySelector(".lb-close").focus();
+    };
+    const close = () => {
+      v.pause(); v.removeAttribute("src"); v.load(); lb.hidden = true;
+      html.style.overflow = ""; if (lenis()) lenis().start();
+      if (back) back.focus({ preventScroll: true });
+    };
+    tiles.forEach((t, i) => t.addEventListener("click", () => open(i)));
+    lb.querySelector(".lb-close").addEventListener("click", close);
+    lb.querySelector(".lb-prev").addEventListener("click", () => show(idx - 1));
+    lb.querySelector(".lb-next").addEventListener("click", () => show(idx + 1));
+    lb.addEventListener("click", e => { if (e.target === lb) close(); });
+    addEventListener("keydown", e => {
+      if (lb.hidden) return;
+      if (e.key === "Escape") close();
+      else if (e.key === "ArrowRight") show(idx + 1);
+      else if (e.key === "ArrowLeft") show(idx - 1);
+      else if (e.key === "Tab") {
+        const f = [...lb.querySelectorAll("button, video")].filter(x => x.offsetParent !== null);
+        const a = f.indexOf(document.activeElement);
+        if (e.shiftKey && a <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+        else if (!e.shiftKey && a === f.length - 1) { e.preventDefault(); f[0].focus(); }
+      }
+    });
+  }
+
+  /* case: beats follow the video, sound toggle, scroll staging */
+  const cv = document.getElementById("caseVideo");
+  if (cv) {
+    const beats = [...document.querySelectorAll(".beats li")];
+    const bar = document.querySelector(".case-bar i"), sb = document.getElementById("caseSound"), clock = document.getElementById("caseClock");
+    const fmt = s => "0:" + String(Math.floor(s)).padStart(2, "0");
+    let raf = 0;
+    const sync = () => {
+      const t = cv.currentTime, d = cv.duration || 15;
+      bar.style.transform = "scaleX(" + Math.min(1, t / d).toFixed(4) + ")";
+      let k = 0; beats.forEach((b, i) => { if (t >= parseFloat(b.dataset.t)) k = i; });
+      beats.forEach((b, i) => b.classList.toggle("on", i === k));
+      clock.textContent = fmt(t) + " / " + fmt(d);
+      raf = cv.paused ? 0 : requestAnimationFrame(sync);
+    };
+    cv.addEventListener("play", () => { if (!raf) raf = requestAnimationFrame(sync); });
+    cv.addEventListener("seeked", sync);
+    beats.forEach(b => b.addEventListener("click", () => { cv.currentTime = parseFloat(b.dataset.t) + 0.05; const p = cv.play(); if (p) p.catch(() => {}); }));
+    const setSound = on => { cv.muted = !on; sb.setAttribute("aria-pressed", on ? "true" : "false"); sb.querySelector("span").textContent = on ? "Sound off" : "Play with sound"; if (on) { const p = cv.play(); if (p) p.catch(() => {}); } };
+    sb.addEventListener("click", () => setSound(cv.muted));
+    document.querySelector(".device").addEventListener("click", () => setSound(cv.muted));
+
+    if (!reduce && window.ScrollTrigger) {
+      const mm = gsap.matchMedia();
+      mm.add("(min-width: 761px)", () => {
+        gsap.to(".case-glow", { scale: 1.15, opacity: 1, ease: "none", scrollTrigger: { trigger: ".case", start: "top 80%", end: "center center", scrub: 0.8 } });
+        gsap.fromTo(".case-bg", { xPercent: 4 }, { xPercent: -28, ease: "none", scrollTrigger: { trigger: ".case", start: "top bottom", end: "bottom top", scrub: 0.6 } });
+        gsap.from(".device", { y: 120, rotate: -7, scale: 0.9, opacity: 0, duration: 1.4, ease: "expo.out", scrollTrigger: { trigger: ".case-phone", start: "top 85%", once: true } });
+      });
+      gsap.from(".beats li", { y: 26, opacity: 0, duration: 0.8, stagger: 0.07, ease: "expo.out", scrollTrigger: { trigger: ".beats", start: "top 85%", once: true },
+        clearProps: "opacity,transform" });
+    }
+  }
 })();
 </script>
 </body>
